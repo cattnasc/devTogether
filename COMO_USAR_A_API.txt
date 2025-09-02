@@ -1,0 +1,188 @@
+================================================================================
+                        SISTEMA DE BOAS-VINDAS - API DE EMAIL
+================================================================================
+
+COMO A API FUNCIONA
+===================
+
+Arquitetura Geral:
+------------------
+Esta é uma API REST simples construída em Node.js que permite enviar emails de 
+boas-vindas personalizados. O sistema é composto por:
+
+1. Backend (server.js): Servidor Express que processa as requisições
+2. Frontend (public/): Interface web para envio de emails  
+3. Templates (mensagem.js): Arquivo com os modelos de email
+4. Configuração (.env): Variáveis de ambiente
+
+Fluxo de Funcionamento:
+-----------------------
+1. Usuário acessa: http://localhost:3000
+2. Preenche formulário com nome e email
+3. Frontend envia POST para /send-welcome
+4. Backend valida os dados
+5. Backend substitui {{nome}} no template
+6. Backend envia email via Resend
+7. Backend retorna sucesso/erro para frontend
+8. Frontend exibe mensagem ao usuário
+
+Endpoints da API:
+-----------------
+
+POST /send-welcome
+- Função: Enviar email de boas-vindas
+- Dados: { "nome": "João", "email": "joao@email.com" }
+- Retorno: { "sucesso": true, "mensagem": "Email enviado!" }
+
+GET /api/status
+- Função: Verificar se a API está funcionando
+- Retorno: { "status": "online", "mensagem": "Sistema funcionando!" }
+
+GET /
+- Função: Servir a página web do formulário
+
+Sistema de Templates:
+---------------------
+- O arquivo mensagem.js contém o modelo do email
+- A variável {{nome}} é substituída pelo nome real do usuário
+- Suporte a email em texto simples e HTML
+
+================================================================================
+
+COMO RODAR NA SUA MÁQUINA
+==========================
+
+Pré-requisitos:
+---------------
+- Node.js instalado (versão 16 ou superior)
+- npm (gerenciador de pacotes do Node.js)
+- Conta no Resend (para envio de emails)
+
+Passo 1: Preparar o Ambiente
+-----------------------------
+# Verificar se Node.js está instalado
+node --version
+
+# Verificar se npm está instalado
+npm --version
+
+Passo 2: Instalar Dependências
+-------------------------------
+# Navegar até a pasta do projeto
+cd "caminho/para/API_EMAIL"
+
+# Instalar as dependências
+npm install
+
+Passo 3: Configurar Variáveis de Ambiente
+------------------------------------------
+Criar arquivo .env na raiz do projeto com:
+
+PORT=3000
+RESEND_API_KEY=sua_chave_do_resend_aqui
+FROM_EMAIL=seu_email@resend.dev
+NODE_ENV=development
+
+Passo 4: Obter Chave do Resend
+------------------------------
+1. Acesse: https://resend.com
+2. Crie uma conta gratuita
+3. Vá em "API Keys" no painel
+4. Gere uma nova chave
+5. Cole a chave no arquivo .env
+
+Passo 5: Executar a Aplicação
+------------------------------
+Para desenvolvimento (com reload automático):
+npm run dev
+
+Para produção:
+npm start
+
+Passo 6: Testar a API
+---------------------
+1. Via Browser:
+   - Acesse: http://localhost:3000
+   - Preencha o formulário
+   - Clique em "Enviar Boas-Vindas"
+
+2. Via ferramenta como Postman:
+   POST http://localhost:3000/send-welcome
+   Content-Type: application/json
+   
+   {
+     "nome": "Teste",
+     "email": "test@exemplo.com"
+   }
+
+3. Verificar status:
+   - Acesse: http://localhost:3000/api/status
+
+================================================================================
+
+ESTRUTURA DO PROJETO
+=====================
+
+API_EMAIL/
+├── server.js          # Servidor principal
+├── mensagem.js        # Templates de email
+├── package.json       # Dependências e scripts
+├── .env              # Configurações (não versionar)
+└── public/           # Frontend
+    ├── index.html    # Formulário web
+    ├── style.css     # Estilos
+    └── script.js     # JavaScript do frontend
+
+================================================================================
+
+COMANDOS ÚTEIS
+==============
+
+# Instalar dependências
+npm install
+
+# Modo desenvolvimento (com nodemon)
+npm run dev
+
+# Modo produção
+npm start
+
+# Verificar se está funcionando
+curl http://localhost:3000/api/status
+
+================================================================================
+
+PERSONALIZAÇÃO
+===============
+
+Para alterar o template do email:
+- Edite o arquivo mensagem.js
+- Modifique as propriedades assunto, texto ou html
+- Use {{nome}} onde quiser que o nome apareça
+
+Para alterar a porta:
+- Modifique PORT=3000 no arquivo .env
+
+Para alterar o visual:
+- Edite os arquivos em public/style.css
+
+================================================================================
+
+Erros
+===============
+
+Erro "Cannot find module":
+npm install
+
+Erro "EADDRINUSE" (porta ocupada):
+- Altere a porta no .env ou finalize processo existente
+
+Email não enviado:
+- Verifique se RESEND_API_KEY está correto
+- Confirme se FROM_EMAIL está configurado no Resend
+
+Servidor não inicia:
+- Verifique se arquivo .env existe
+- Confirme se todas as variáveis estão definidas
+
+
